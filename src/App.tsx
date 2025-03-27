@@ -52,7 +52,7 @@ function App() {
         <iframe
           id="JotFormIFrame"
           title="Contact Form"
-          src="https://form.jotform.com/250775150448055"
+          src="https://form.jotform.com/250774002583050"
           frameBorder="0"
           allowTransparency={true}
           allowFullScreen
