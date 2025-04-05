@@ -385,14 +385,14 @@
       <div id="timer_container">
         <div id="timer">00:00</div>
         <div class="button-container">
-          <button id="startStopButton" class="button start-button">
+          <div id="startStopButton" class="button start-button">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
               stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
               class="lucide lucide-play ">
               <polygon points="5 3 19 12 5 21 5 3"></polygon>
             </svg>
             Start
-          </button>
+          </div>
         </div>
       </div>
       <ul class="form-section page-section" role="presentation">
@@ -4018,7 +4018,7 @@
 
     startStopButton.addEventListener("click", handlerTimer);
   </script>
-  <!-- <script>
+  <script>
     // Get all input elements in the body
     const inputs = document.querySelectorAll('input');
 
@@ -4031,7 +4031,7 @@
         }
       });
     });
-  </script> -->
+  </script>
 </body>
 
 </html>
