@@ -175,7 +175,74 @@
 
     /* Injected CSS Code */
   </style>
+  <style>
+    #timer_container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
 
+    #timer {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace;
+      font-size: 3.75rem;
+      line-height: 1;
+    }
+
+    .button-container {
+      margin-left: 20px;
+    }
+
+    .button {
+      padding: 10px 20px;
+      font-size: 18px;
+      font-weight: bold;
+      border-radius: 10px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      transition: background-color 0.3s ease;
+      border-width: 0;
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+      padding-top: 1.5rem;
+      padding-bottom: 1.5rem;
+      --tw-bg-opacity: 1;
+      gap: .5rem;
+      transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+      transition-timing-function: cubic-bezier(.4, 0, .2, 1);
+      transition-duration: .15s;
+    }
+
+    .start-button {
+      background-color: #38a169;
+      color: white;
+      --tw-bg-opacity: 1;
+      background-color: rgb(34 197 94 / var(--tw-bg-opacity));
+    }
+
+    .start-button:hover {
+      background-color: #2f855a;
+    }
+
+    .stop-button {
+      background-color: #e53e3e;
+      color: white;
+    }
+
+    .stop-button:hover {
+      background-color: #c53030;
+    }
+
+    iframe {
+      width: 100%;
+      height: 80vh;
+      border: 0;
+      border-radius: 10px;
+      margin-top: 20px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+  </style>
   <script>window.enableEventObserver = true</script>
   <script src="https://cdn02.jotfor.ms/static/prototype.forms.js?v=3.3.62092" type="text/javascript"></script>
   <script src="https://cdn03.jotfor.ms/static/jotform.forms.js?v=3.3.62092" type="text/javascript"></script>
@@ -315,6 +382,19 @@
       type="hidden" name="uploadServerUrl" value="https://upload.jotform.com/upload" /><input type="hidden"
       name="eventObserver" value="1" />
     <div role="main" class="form-all">
+      <div id="timer_container">
+        <div id="timer">00:00</div>
+        <div class="button-container">
+          <button id="startStopButton" class="button start-button">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+              class="lucide lucide-play ">
+              <polygon points="5 3 19 12 5 21 5 3"></polygon>
+            </svg>
+            Start
+          </button>
+        </div>
+      </div>
       <ul class="form-section page-section" role="presentation">
         <li id="cid_1" class="form-input-wide" data-type="control_head">
           <div class="form-header-group  header-default">
@@ -3862,7 +3942,8 @@
             <div data-align="center" class="form-buttons-wrapper form-buttons-center   jsTest-button-wrapperField">
               <button id="input_2" type="submit"
                 class="form-submit-button submit-button jf-form-buttons jsTest-submitField legacy-submit"
-                data-component="button" data-content="">Submit</button></div>
+                data-component="button" data-content="">Submit</button>
+            </div>
           </div>
         </li>
         <li style="display:none">Should be Empty: <input type="text" name="website" value="" type="hidden" /></li>
@@ -3881,6 +3962,76 @@
       }
     </script>
   </form>
+
+  <script>
+    let time = 0;
+    let isRunning = false;
+    let intervalId;
+
+    const startStopButton = document.getElementById("startStopButton");
+    const timerElement = document.getElementById("timer");
+    const startIcon = document.getElementById("startIcon");
+    const stopIcon = document.getElementById("stopIcon");
+
+    const formatTime = (seconds) => {
+      const mins = Math.floor(seconds / 60);
+      const secs = seconds % 60;
+      return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+    };
+
+    const updateTime = () => {
+      time += 1;
+      timerElement.textContent = formatTime(time);
+    }
+
+    const startTimer = () => {
+      isRunning = true
+      intervalId = setInterval(updateTime, 1000);
+      startStopButton.classList.remove("start-button");
+      startStopButton.classList.add("stop-button");
+      startStopButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                class="lucide lucide-pause ">
+                <rect width="4" height="16" x="6" y="4"></rect>
+                <rect width="4" height="16" x="14" y="4"></rect>
+              </svg> Stop`;
+    }
+
+    const stopTimer = () => {
+      isRunning = false
+      clearInterval(intervalId);
+      startStopButton.classList.remove("stop-button");
+      startStopButton.classList.add("start-button");
+      startStopButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" 
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+              class="lucide lucide-play ">
+              <polygon points="5 3 19 12 5 21 5 3"></polygon>
+            </svg> Start`;
+    }
+
+    const handlerTimer = () => {
+      if (isRunning)
+        stopTimer();
+      else
+        startTimer()
+    }
+
+    startStopButton.addEventListener("click", handlerTimer);
+  </script>
+  <script>
+    // Get all input elements in the body
+    const inputs = document.querySelectorAll('input');
+
+    // Add event listener to prevent Enter key action on inputs
+    inputs.forEach(input => {
+      input.addEventListener('keydown', function (event) {
+        if (event.key === 'Enter') {
+          event.preventDefault();  // Prevent the default action (form submission)
+          console.log('Enter key pressed but action prevented.');
+        }
+      });
+    });
+  </script>
 </body>
 
 </html>
